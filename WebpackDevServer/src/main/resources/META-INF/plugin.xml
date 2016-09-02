@@ -1,0 +1,25 @@
+<idea-plugin version="2">
+  <id>net.sblundy.plugins.webpack.devServerdevserver.webpack</id>
+  <name>Webpack Dev Server</name>
+  <version>0.1</version>
+  <vendor email="el_gonzzo@hotmail.com" url="http://github.com/sblundy">Steven Blundy</vendor>
+
+  <depends>com.intellij.modules.lang</depends>
+  <depends>JavaScript</depends>
+
+  <description><![CDATA[
+    Plugin to integrate webpack.
+    ]]></description>
+
+  <project-components>
+    <component>
+      <interface-class>net.sblundy.plugins.webpack.devServer.server.Server</interface-class>
+      <implementation-class>net.sblundy.plugins.webpack.devServer.server.ServerImpl</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="net.sblundy.plugins.webpack.devServer.WebPackDevServerConfigType"/>
+  </extensions>
+
+</idea-plugin>

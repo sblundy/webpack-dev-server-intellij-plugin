@@ -1,0 +1,9 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "dependencies": {
+    "webpack": "1.13.2",
+    "webpack-dev-middleware": "1.6.1",
+    "express": "4.14.0"
+  }
+}

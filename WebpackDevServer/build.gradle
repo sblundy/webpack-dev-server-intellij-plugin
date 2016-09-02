@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.1.10"
+}
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile project(':resources_en')
+    testCompile 'junit:junit:4.12'
+}
+
+intellij {
+    version 'IU-2016.1'
+    type 'IU'
+    plugins = ['JavaScriptLanguage']
+}
+
+task copyJs(type: org.gradle.api.tasks.Copy) {
+    from 'src/main/js'
+    into { "$prepareSandbox.destinationDir/$project.name/js" }
+}
+
+afterEvaluate {
+    prepareSandbox.dependsOn copyJs
+}
