@@ -75,6 +75,6 @@ public class ServerInitTask extends Task.WithResult<File, ExecutionException> {
         String jarPath = PathUtil.getJarPathForClass(WebpackDevServerRunProfileState.class);
         File pluginClassesDir = new File(jarPath);
 
-        return new File(pluginClassesDir.getParent(), "js/");
+        return new File(pluginClassesDir.getParent(), "server");
     }
 }

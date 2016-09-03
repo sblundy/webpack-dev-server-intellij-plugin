@@ -30,7 +30,7 @@ public class ServerImpl extends AbstractProjectComponent implements Server, Proj
         String jarPath = PathUtil.getJarPathForClass(WebpackDevServerRunProfileState.class);
         File pluginClassesDir = new File(jarPath);
 
-        File script = new File(pluginClassesDir.getParent(), "js/server.js");
+        File script = new File(pluginClassesDir.getParent(), "server/server.js");
 
         LOGGER.assertTrue(script.exists(), "Script file not found:" + script.getAbsolutePath());
         return script;

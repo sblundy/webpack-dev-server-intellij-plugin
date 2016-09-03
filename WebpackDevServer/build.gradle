@@ -14,8 +14,13 @@ repositories {
     jcenter()
 }
 
+configurations {
+    javascript
+}
+
 dependencies {
     compile project(':resources_en')
+    javascript project(':server')
     testCompile 'junit:junit:4.12'
 }
 
@@ -25,9 +30,9 @@ intellij {
     plugins = ['JavaScriptLanguage']
 }
 
-task copyJs(type: org.gradle.api.tasks.Copy) {
-    from 'src/main/js'
-    into { "$prepareSandbox.destinationDir/$project.name/js" }
+task copyJs(type: org.gradle.api.tasks.Copy, dependsOn: configurations.javascript) {
+    from zipTree(configurations.javascript.singleFile)
+    into { "$prepareSandbox.destinationDir/$project.name/" }
 }
 
 afterEvaluate {
