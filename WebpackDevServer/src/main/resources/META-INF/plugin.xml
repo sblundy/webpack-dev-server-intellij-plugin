@@ -13,8 +13,8 @@
 
   <project-components>
     <component>
-      <interface-class>net.sblundy.plugins.webpack.devServer.server.Server</interface-class>
-      <implementation-class>net.sblundy.plugins.webpack.devServer.server.ServerImpl</implementation-class>
+      <interface-class>net.sblundy.plugins.webpack.devServer.server.ServerMonitorFactory</interface-class>
+      <implementation-class>net.sblundy.plugins.webpack.devServer.server.ServerMonitorFactoryImpl</implementation-class>
     </component>
   </project-components>
 

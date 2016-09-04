@@ -1,6 +1,13 @@
+
 buildscript {
+    ext.kotlin_version = '1.0.3'
     repositories {
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -9,6 +16,7 @@ plugins {
 }
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 repositories {
     jcenter()
@@ -20,7 +28,13 @@ configurations {
 
 dependencies {
     compile project(':resources_en')
+    compile group: 'org.json', name: 'json', version: '20160810'
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.8.2'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
     javascript project(':server')
+
     testCompile 'junit:junit:4.12'
 }
 

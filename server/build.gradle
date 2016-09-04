@@ -23,8 +23,7 @@ distributions {
     main {
         contents {
             from("${project.projectDir}") {
-                include 'package.json'
-                include 'server.js'
+                exclude(['build', 'node_modules', 'build.gradle'])
             }
         }
     }
