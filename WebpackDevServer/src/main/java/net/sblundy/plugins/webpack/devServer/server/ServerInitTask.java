@@ -36,6 +36,7 @@ public class ServerInitTask extends Task.WithResult<File, ExecutionException> {
     @Override
     protected File compute(@NotNull ProgressIndicator indicator) throws ExecutionException {
         File target = Files.createTempDir();
+        LOGGER.debug("Installing at " + target.getAbsolutePath());
         indicator.setText(WebpackDevServerBundle.message("setup.step.initial"));
         try {
             FileUtil.copy(new File(getScriptDir(), "package.json"), new File(target, "package.json"));
@@ -53,7 +54,13 @@ public class ServerInitTask extends Task.WithResult<File, ExecutionException> {
             LOGGER.warn("Install failed\n" + output.getStdout() + "\n" + output.getStderr());
             throw new ExecutionException("Install failed");
         } else {
-            return target;
+            indicator.setText(WebpackDevServerBundle.message("setup.step.cleanup"));
+            File webpack = new File(target, "node_modules/webpack");
+            if (!FileUtil.delete(webpack)) {
+                throw new ExecutionException("Install cleanup failed");
+            } else {
+                return target;
+            }
         }
     }
 
