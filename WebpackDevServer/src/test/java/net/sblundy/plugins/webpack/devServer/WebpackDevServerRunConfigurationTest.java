@@ -5,8 +5,11 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterRef;
 import com.intellij.openapi.command.impl.DummyProject;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,16 +18,24 @@ import static org.junit.Assert.*;
  */
 public class WebpackDevServerRunConfigurationTest {
 
-    @Test
-    public void roundTripConfigSave() throws Exception {
-        Project mock = DummyProject.getInstance();
-        ConfigurationFactoryEx<RunConfiguration> factory = new ConfigurationFactoryEx<RunConfiguration>(new WebPackDevServerConfigType()) {
+    private ConfigurationFactoryEx<RunConfiguration> factory;
+    private Project dummyProject;
+
+    @Before
+    public void setUp(){
+        factory = new ConfigurationFactoryEx<RunConfiguration>(new WebPackDevServerConfigType()) {
             @NotNull
             @Override
             public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
                 return null;
             }
         };
+        dummyProject = DummyProject.getInstance();
+    }
+
+    @Test
+    public void roundTripConfigSave() throws WriteExternalException, InvalidDataException {
+        Project mock = DummyProject.getInstance();
         WebpackDevServerRunConfiguration source = new WebpackDevServerRunConfiguration(mock, factory, "test");
 
         source.setInterpreterRef(NodeJsInterpreterRef.create("dummy"));
@@ -34,15 +45,39 @@ public class WebpackDevServerRunConfigurationTest {
         source.setNodeModulesDir("test/node_modules");
         source.setWorkingDir("temp");
         Element config = new Element("config");
+
         source.writeExternal(config);
         WebpackDevServerRunConfiguration target = new WebpackDevServerRunConfiguration(mock, factory, "test");
         target.readExternal(config);
 
-        assertEquals(source.getInterpreterRef().getReferenceName(), target.getInterpreterRef().getReferenceName());
-        assertEquals(source.getPortNumber(), target.getPortNumber());
-        assertEquals(source.getNodeOptions(), target.getNodeOptions());
-        assertEquals(source.getWebPackConfigFile(), target.getWebPackConfigFile());
-        assertEquals(source.getNodeModulesDir(), target.getNodeModulesDir());
-        assertEquals(source.getWorkingDir(), target.getWorkingDir());
+        assertEqual(source, target);
+    }
+
+    @Test
+    public void roundTripConfigSaveMinimal() throws WriteExternalException, InvalidDataException {
+        WebpackDevServerRunConfiguration source = new WebpackDevServerRunConfiguration(dummyProject, factory, "test");
+        source.setInterpreterRef(NodeJsInterpreterRef.create(""));
+
+        Element config = new Element("config");
+
+        source.writeExternal(config);
+        WebpackDevServerRunConfiguration target = new WebpackDevServerRunConfiguration(dummyProject, factory, "test");
+        target.readExternal(config);
+
+        assertEqual(source, target);
+    }
+
+    private static void assertEqual(WebpackDevServerRunConfiguration expected, WebpackDevServerRunConfiguration actual) {
+        if (expected.getInterpreterRef() == null) {
+            assertNull(actual.getInterpreterRef());
+        } else {
+            assertNotNull(actual.getInterpreterRef());
+            assertEquals(expected.getInterpreterRef().getReferenceName(), actual.getInterpreterRef().getReferenceName());
+        }
+        assertEquals(expected.getPortNumber(), actual.getPortNumber());
+        assertEquals(expected.getNodeOptions(), actual.getNodeOptions());
+        assertEquals(expected.getWebPackConfigFile(), actual.getWebPackConfigFile());
+        assertEquals(expected.getNodeModulesDir(), actual.getNodeModulesDir());
+        assertEquals(expected.getWorkingDir(), actual.getWorkingDir());
     }
 }

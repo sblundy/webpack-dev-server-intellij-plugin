@@ -3,8 +3,8 @@ package net.sblundy.plugins.webpack.devServer;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
-import com.intellij.execution.configurations.LocatableConfigurationBase;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -15,13 +15,14 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  */
-public class WebpackDevServerRunConfiguration extends LocatableConfigurationBase implements RunConfiguration {
+public class WebpackDevServerRunConfiguration extends RunConfigurationBase implements RunConfiguration {
     private String portNumber;
     private String webPackConfigFile;
     private NodeJsInterpreterRef interpreterRef;
@@ -64,12 +65,24 @@ public class WebpackDevServerRunConfiguration extends LocatableConfigurationBase
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
-        element.addContent(createElement("port-number", this.portNumber));
-        element.addContent(createElement("config-file", toSystemIndependentNameOrEmpty(this.webPackConfigFile)));
-        element.addContent(createElement("node-interpreter", this.interpreterRef.getReferenceName()));
-        element.addContent(createElement("node-options", this.nodeOptions));
-        element.addContent(createElement("node-modules-dir", toSystemIndependentNameOrEmpty(this.nodeModulesDir)));
-        element.addContent(createElement("working-dir", toSystemIndependentNameOrEmpty(this.workingDir)));
+        if (StringUtils.isNotBlank(this.portNumber)) {
+            element.addContent(createElement("port-number", this.portNumber));
+        }
+        if (StringUtils.isNotBlank(this.webPackConfigFile)) {
+            element.addContent(createElement("config-file", toSystemIndependentNameOrEmpty(this.webPackConfigFile)));
+        }
+        if (null != this.interpreterRef) {
+            element.addContent(createElement("node-interpreter", this.interpreterRef.getReferenceName()));
+        }
+        if (StringUtils.isNotBlank(this.nodeOptions)) {
+            element.addContent(createElement("node-options", this.nodeOptions));
+        }
+        if (StringUtils.isNotBlank(this.nodeModulesDir)) {
+            element.addContent(createElement("node-modules-dir", toSystemIndependentNameOrEmpty(this.nodeModulesDir)));
+        }
+        if (StringUtils.isNotBlank(this.workingDir)) {
+            element.addContent(createElement("working-dir", toSystemIndependentNameOrEmpty(this.workingDir)));
+        }
     }
 
     @NotNull
@@ -87,7 +100,6 @@ public class WebpackDevServerRunConfiguration extends LocatableConfigurationBase
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         //TODO
-        super.checkConfiguration();
     }
 
     public void setPortNumber(String portNumber) {
@@ -140,5 +152,17 @@ public class WebpackDevServerRunConfiguration extends LocatableConfigurationBase
 
     public void setWorkingDir(String workingDir) {
         this.workingDir = workingDir;
+    }
+
+    @Override
+    public String toString() {
+        return "WebpackDevServerRunConfiguration{" +
+                "portNumber='" + portNumber + '\'' +
+                ", webPackConfigFile='" + webPackConfigFile + '\'' +
+                ", interpreterRef=" + interpreterRef +
+                ", nodeOptions='" + nodeOptions + '\'' +
+                ", nodeModulesDir='" + nodeModulesDir + '\'' +
+                ", workingDir='" + workingDir + '\'' +
+                '}';
     }
 }
