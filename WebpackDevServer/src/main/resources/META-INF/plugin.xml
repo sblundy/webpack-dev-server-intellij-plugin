@@ -1,4 +1,5 @@
 <idea-plugin version="2">
+  <idea-version since-build="145.258"/>
   <id>net.sblundy.plugins.webpack.devServerdevserver.webpack</id>
   <name>Webpack Dev Server</name>
   <version>0.1</version>

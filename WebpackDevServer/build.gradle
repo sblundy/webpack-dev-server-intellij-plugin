@@ -41,6 +41,7 @@ dependencies {
 intellij {
     version 'IU-2016.1'
     type 'IU'
+    updateSinceUntilBuild false
     plugins = ['JavaScriptLanguage']
 }
 
