@@ -11,10 +11,10 @@ import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import net.sblundy.plugins.webpack.devServer.server.ServerMonitorFactory;
 import net.sblundy.plugins.webpack.devServer.server.ServerStatusMonitor;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +50,7 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
         commandLine.setWorkDirectory(configuration.getWorkingDir());
 
         commandLine.setExePath(configuration.getNodeInterpreterRef().resolveAsLocal(getEnvironment().getProject()).getInterpreterSystemDependentPath());
-        if (StringUtil.isNotEmpty(configuration.getNodeOptions().trim())) {
+        if (StringUtils.isNotBlank(configuration.getNodeOptions())) {
             commandLine.addParameters(ParametersList.parse(configuration.getNodeOptions().trim()));
         }
         File script = this.serverMonitorFactory.getScriptFile();
