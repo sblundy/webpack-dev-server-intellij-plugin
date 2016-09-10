@@ -14,7 +14,6 @@ import com.intellij.util.ui.SwingHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.ResourceBundle;
 
 /**
  */
@@ -27,6 +26,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
     private final TextFieldWithBrowseButton workingDirField;
     private final TextFieldWithBrowseButton configFileName;
     private final JTextField portNumber;
+    private final JTextField basePath;
 
     public WebpackDevServerRunConfigurationEditor(@NotNull Project project) {
         this.nodeJsInterpreterField = new NodeJsInterpreterField(project, false);
@@ -35,6 +35,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
         this.nodeModulesDirField = createNodeModulesDirTextField(project);
         this.workingDirField = createWorkingDirTextField(project);
         this.portNumber = new JTextField();
+        this.basePath = new JTextField();
         this.configFileName = createConfigFilePathTextField(project, this.nodeModulesDirField.getTextField());
         FormBuilder builder = new FormBuilder();
         builder.addLabeledComponent(WebpackDevServerBundle.message("editor.interpreter.label"), this.nodeJsInterpreterField);
@@ -43,6 +44,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
         builder.addLabeledComponent(WebpackDevServerBundle.message("editor.working.dir.label"), this.workingDirField);
         builder.addLabeledComponent(WebpackDevServerBundle.message("editor.config.file.label"), this.configFileName);
         builder.addLabeledComponent(WebpackDevServerBundle.message("editor.port.label"), this.portNumber);
+        builder.addLabeledComponent(WebpackDevServerBundle.message("editor.base.path.label"), this.basePath);
         this.myComponent = builder.getPanel();
     }
 
@@ -63,6 +65,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
         this.workingDirField.setText(config.getWorkingDir());
         this.configFileName.setText(config.getWebPackConfigFile());
         this.portNumber.setText(config.getPortNumber());
+        this.basePath.setText(config.getBasePath());
     }
 
 
@@ -74,6 +77,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
         config.setWorkingDir(this.workingDirField.getText());
         config.setWebPackConfigFile(this.configFileName.getText());
         config.setPortNumber(this.portNumber.getText());
+        config.setBasePath(this.basePath.getText());
     }
 
     @NotNull

@@ -58,6 +58,7 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
         commandLine.addParameter(configuration.getWebPackConfigFile());
         commandLine.addParameter(configuration.getPortNumber());
         commandLine.addParameter(String.valueOf(monitor.getPort()));
+        commandLine.addParameter(StringUtils.isBlank(configuration.getBasePath()) ? "/" : configuration.getBasePath());
         return commandLine;
     }
 

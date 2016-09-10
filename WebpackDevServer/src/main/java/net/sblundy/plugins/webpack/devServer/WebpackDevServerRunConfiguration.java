@@ -29,6 +29,7 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
     private String nodeOptions;
     private String nodeModulesDir;
     private String workingDir;
+    private String basePath;
 
     public WebpackDevServerRunConfiguration(Project project, ConfigurationFactoryEx<RunConfiguration> factory, String name) {
         super(project, factory, name);
@@ -55,6 +56,7 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
         this.nodeOptions = element.getChildText("node-options");
         this.nodeModulesDir = toSystemDependentNameOrNull(element.getChildText("node-modules-dir"));
         this.workingDir = toSystemDependentNameOrNull(element.getChildText("working-dir"));
+        this.basePath = element.getChildText("base-path");
     }
 
     @Nullable
@@ -82,6 +84,9 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
         }
         if (StringUtils.isNotBlank(this.workingDir)) {
             element.addContent(createElement("working-dir", toSystemIndependentNameOrEmpty(this.workingDir)));
+        }
+        if (StringUtils.isNotBlank(this.basePath)) {
+            element.addContent(createElement("base-path", this.basePath));
         }
     }
 
@@ -154,6 +159,14 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
         this.workingDir = workingDir;
     }
 
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
     @Override
     public String toString() {
         return "WebpackDevServerRunConfiguration{" +
@@ -163,6 +176,7 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
                 ", nodeOptions='" + nodeOptions + '\'' +
                 ", nodeModulesDir='" + nodeModulesDir + '\'' +
                 ", workingDir='" + workingDir + '\'' +
+                ", basePath='" + basePath + '\'' +
                 '}';
     }
 }

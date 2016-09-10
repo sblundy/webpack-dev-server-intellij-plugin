@@ -1,6 +1,7 @@
 var webpackConfigFileName = process.argv[2];
 var port = Number.parseInt(process.argv[3]);
 var comPort = Number.parseInt(process.argv[4]);
+var basePath = process.argv[5];
 
 var express = require('express');
 var webpack = require('webpack');
@@ -15,9 +16,11 @@ var compiler = webpack(config);
 const app = express();
 compiler.apply(new DashboardPlugin({handler: connection.handle.bind(connection)}));
 
-app.use(webpackMiddleware(compiler, {
-    publicPath: "/assets/"
-}));
+var options = {};
+if (basePath !== '/') {
+    options.publicPath = basePath;
+}
+app.use(webpackMiddleware(compiler, options));
 
 app.listen(port, '0.0.0.0', function(err) {
     if (err) {

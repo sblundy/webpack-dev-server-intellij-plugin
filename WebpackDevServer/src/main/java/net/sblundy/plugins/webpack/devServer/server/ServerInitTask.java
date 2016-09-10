@@ -29,7 +29,7 @@ public class ServerInitTask extends Task.WithResult<File, ExecutionException> {
     private final NodeJsInterpreterRef interpreterRef;
 
     public ServerInitTask(Project project, NodeJsInterpreterRef interpreterRef) {
-        super(project, WebpackDevServerBundle.message("setup.title"), false);
+        super(project, WebpackDevServerBundle.message("setup.title"), true);
         this.interpreterRef = interpreterRef;
     }
 
@@ -38,6 +38,7 @@ public class ServerInitTask extends Task.WithResult<File, ExecutionException> {
         File target = Files.createTempDir();
         LOGGER.debug("Installing at " + target.getAbsolutePath());
         indicator.setText(WebpackDevServerBundle.message("setup.step.initial"));
+        indicator.setIndeterminate(true);
         try {
             FileUtil.copy(new File(getScriptDir(), "package.json"), new File(target, "package.json"));
         } catch (IOException e) {
