@@ -1,4 +1,4 @@
-package net.sblundy.plugins.webpack.devServer;
+package net.sblundy.plugins.webpack.devServer.config;
 
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterField;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -11,13 +11,14 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.SwingHelper;
+import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 /**
  */
-public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<WebpackDevServerRunConfiguration> {
+class WebpackDevServerRunConfigurationEditor extends SettingsEditor<WebpackDevServerRunConfiguration> {
     private JPanel myComponent;
 
     private final NodeJsInterpreterField nodeJsInterpreterField;
@@ -28,7 +29,7 @@ public class WebpackDevServerRunConfigurationEditor extends SettingsEditor<Webpa
     private final JTextField portNumber;
     private final JTextField basePath;
 
-    public WebpackDevServerRunConfigurationEditor(@NotNull Project project) {
+    WebpackDevServerRunConfigurationEditor(@NotNull Project project) {
         this.nodeJsInterpreterField = new NodeJsInterpreterField(project, false);
         this.nodeJsOptions = new RawCommandLineEditor();
         this.nodeJsOptions.setDialogCaption(WebpackDevServerBundle.message("editor.node.options.caption"));

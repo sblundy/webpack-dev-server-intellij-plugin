@@ -20,7 +20,7 @@
   </project-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <configurationType implementation="net.sblundy.plugins.webpack.devServer.WebPackDevServerConfigType"/>
+    <configurationType implementation="net.sblundy.plugins.webpack.devServer.config.WebPackDevServerConfigType"/>
   </extensions>
 
 </idea-plugin>

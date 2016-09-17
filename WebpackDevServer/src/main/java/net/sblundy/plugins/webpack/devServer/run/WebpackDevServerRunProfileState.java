@@ -1,4 +1,4 @@
-package net.sblundy.plugins.webpack.devServer;
+package net.sblundy.plugins.webpack.devServer.run;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -12,6 +12,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import net.sblundy.plugins.webpack.devServer.config.WebpackDevServerRunConfiguration;
 import net.sblundy.plugins.webpack.devServer.server.ServerMonitorFactory;
 import net.sblundy.plugins.webpack.devServer.server.ServerStatusMonitor;
 import org.apache.commons.lang.StringUtils;
@@ -45,11 +46,11 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
     @NotNull
     private GeneralCommandLine createCommandLine() throws ExecutionException {
         GeneralCommandLine commandLine = new GeneralCommandLine();
-        commandLine.withEnvironment("NODE_PATH", this.serverMonitorFactory.getLibraryCache(configuration.getNodeInterpreterRef()).getAbsolutePath() + File.pathSeparator + new File(configuration.getNodeModulesDir()).getAbsolutePath());
+        commandLine.withEnvironment("NODE_PATH", this.serverMonitorFactory.getLibraryCache(configuration.getInterpreterRef()).getAbsolutePath() + File.pathSeparator + new File(configuration.getNodeModulesDir()).getAbsolutePath());
         commandLine.withCharset(CharsetToolkit.UTF8_CHARSET);
         commandLine.setWorkDirectory(configuration.getWorkingDir());
 
-        commandLine.setExePath(configuration.getNodeInterpreterRef().resolveAsLocal(getEnvironment().getProject()).getInterpreterSystemDependentPath());
+        commandLine.setExePath(configuration.getInterpreterRef().resolveAsLocal(getEnvironment().getProject()).getInterpreterSystemDependentPath());
         if (StringUtils.isNotBlank(configuration.getNodeOptions())) {
             commandLine.addParameters(ParametersList.parse(configuration.getNodeOptions().trim()));
         }

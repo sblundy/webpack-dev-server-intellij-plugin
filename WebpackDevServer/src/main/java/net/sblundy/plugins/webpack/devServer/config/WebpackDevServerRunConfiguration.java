@@ -1,4 +1,4 @@
-package net.sblundy.plugins.webpack.devServer;
+package net.sblundy.plugins.webpack.devServer.config;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -15,6 +15,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import net.sblundy.plugins.webpack.devServer.run.WebpackDevServerRunProfileState;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
     private String workingDir;
     private String basePath;
 
-    public WebpackDevServerRunConfiguration(Project project, ConfigurationFactoryEx<RunConfiguration> factory, String name) {
+    public WebpackDevServerRunConfiguration(Project project, ConfigurationFactoryEx<? extends RunConfiguration> factory, String name) {
         super(project, factory, name);
     }
 
@@ -145,10 +146,6 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
 
     public void setNodeModulesDir(String nodeModulesDir) {
         this.nodeModulesDir = nodeModulesDir;
-    }
-
-    public NodeJsInterpreterRef getNodeInterpreterRef() {
-        return interpreterRef;
     }
 
     public String getWorkingDir() {

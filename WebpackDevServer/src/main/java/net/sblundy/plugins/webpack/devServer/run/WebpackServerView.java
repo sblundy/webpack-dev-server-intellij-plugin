@@ -1,4 +1,4 @@
-package net.sblundy.plugins.webpack.devServer;
+package net.sblundy.plugins.webpack.devServer.run;
 
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
@@ -9,6 +9,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Disposer;
+import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
 import net.sblundy.plugins.webpack.devServer.server.CompileStatusListener;
 import net.sblundy.plugins.webpack.devServer.server.ServerStatusMonitor;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ import java.awt.*;
 
 /**
  */
-public class WebpackServerView implements ConsoleView {
+class WebpackServerView implements ConsoleView {
     private static final Logger LOGGER = Logger.getInstance(WebpackServerView.class);
 
     private final ServerStatusMonitor monitor;
@@ -26,7 +27,7 @@ public class WebpackServerView implements ConsoleView {
     private JPanel myComponent;
     private StatusPanel statusPanel;
 
-    public WebpackServerView(TextConsoleBuilder builder, ServerStatusMonitor monitor) {
+    WebpackServerView(TextConsoleBuilder builder, ServerStatusMonitor monitor) {
         this.myConsoleView = builder.getConsole();
         this.monitor = monitor;
         Disposer.register(this, this.myConsoleView);

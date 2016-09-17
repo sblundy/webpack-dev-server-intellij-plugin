@@ -8,6 +8,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M2'
     }
 }
 
@@ -17,6 +18,7 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 repositories {
     jcenter()
@@ -35,7 +37,9 @@ dependencies {
 
     javascript project(':server')
 
-    testCompile 'junit:junit:4.12'
+    testCompile "com.winterbe:expekt:0.4.0"
+    testCompile 'org.jetbrains.spek:spek-api:1.0.89'
+    testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.0.89'
 }
 
 intellij {
@@ -45,6 +49,12 @@ intellij {
     plugins = ['JavaScriptLanguage']
 }
 
+junitPlatform {
+    engines {
+        include 'spek'
+    }
+}
+
 task copyJs(type: org.gradle.api.tasks.Copy, dependsOn: configurations.javascript) {
     from zipTree(configurations.javascript.singleFile)
     into { "$prepareSandbox.destinationDir/$project.name/" }
@@ -52,4 +62,5 @@ task copyJs(type: org.gradle.api.tasks.Copy, dependsOn: configurations.javascrip
 
 afterEvaluate {
     prepareSandbox.dependsOn copyJs
+    build.dependsOn buildPlugin
 }

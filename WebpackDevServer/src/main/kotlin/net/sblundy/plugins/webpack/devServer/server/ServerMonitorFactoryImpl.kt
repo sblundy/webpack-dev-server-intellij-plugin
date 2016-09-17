@@ -7,7 +7,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import com.intellij.util.PathUtil
-import net.sblundy.plugins.webpack.devServer.WebpackDevServerRunProfileState
+import net.sblundy.plugins.webpack.devServer.run.WebpackDevServerRunProfileState
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ExecutionException

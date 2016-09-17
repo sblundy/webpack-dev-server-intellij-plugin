@@ -15,7 +15,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.util.PathUtil;
 import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
-import net.sblundy.plugins.webpack.devServer.WebpackDevServerRunProfileState;
+import net.sblundy.plugins.webpack.devServer.run.WebpackDevServerRunProfileState;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

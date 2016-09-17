@@ -1,4 +1,4 @@
-package net.sblundy.plugins.webpack.devServer;
+package net.sblundy.plugins.webpack.devServer.run;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.ui.MessageType;
@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.JBProgressBar;
 import com.intellij.ui.components.JBLabel;
+import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -13,7 +14,7 @@ import java.awt.*;
 
 /**
  */
-public class StatusPanel extends JPanel {
+class StatusPanel extends JPanel {
     private static final Logger LOGGER = Logger.getInstance(StatusPanel.class);
 
     private static final JBColor GREEN = new JBColor( new Color(89, 161, 95), new Color(58, 125, 63));
@@ -22,7 +23,7 @@ public class StatusPanel extends JPanel {
     private final JProgressBar progressBar;
     private final JPanel statusPanel;
 
-    public StatusPanel() {
+    StatusPanel() {
         super(new VerticalFlowLayout());
         this.progressBar = new JBProgressBar();
         this.progressBar.setMinimum(0);
@@ -38,7 +39,7 @@ public class StatusPanel extends JPanel {
         add(this.statusPanel);
     }
 
-    public void setProgress(String message, double progress) {
+    void setProgress(String message, double progress) {
         SwingUtilities.invokeLater(() -> {
             setStatus(message, MessageType.INFO.getPopupBackground(), MessageType.INFO.getTitleForeground());
             progressBar.setValue((int)(100 * progress));
@@ -52,15 +53,15 @@ public class StatusPanel extends JPanel {
         statusLabel.setForeground(foreground);
     }
 
-    public void setErrorMessage(String message) {
+    void setErrorMessage(String message) {
         SwingUtilities.invokeLater(() -> setStatus(message, MessageType.ERROR.getPopupBackground(), MessageType.ERROR.getTitleForeground()));
     }
 
-    public void setWarnMessage(String message) {
+    void setWarnMessage(String message) {
         SwingUtilities.invokeLater(() -> setStatus(message, MessageType.WARNING.getPopupBackground(), MessageType.WARNING.getTitleForeground()));
     }
 
-    public void setSuccessMessage(String message) {// 46, 132, 34
+    void setSuccessMessage(String message) {// 46, 132, 34
         SwingUtilities.invokeLater(() -> setStatus(message, GREEN, JBColor.black));
     }
 
