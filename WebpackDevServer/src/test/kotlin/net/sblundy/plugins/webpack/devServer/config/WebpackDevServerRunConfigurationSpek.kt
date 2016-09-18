@@ -10,7 +10,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 
 class WebpackDevServerRunConfigurationSpek: Spek({
-    describe("WebpackDevServerRunConfigurationImpl") {
+    describe("WebpackDevServerRunConfiguration") {
         val type = WebPackDevServerConfigType()
 
         val factory = type.defaultFactory

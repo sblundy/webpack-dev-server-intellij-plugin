@@ -8,14 +8,20 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.ui.tabs.JBTabs;
+import com.intellij.ui.tabs.TabInfo;
+import com.intellij.ui.tabs.impl.JBTabsImpl;
 import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
+import net.sblundy.plugins.webpack.devServer.server.Asset;
 import net.sblundy.plugins.webpack.devServer.server.CompileStatusListener;
 import net.sblundy.plugins.webpack.devServer.server.ServerStatusMonitor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  */
@@ -26,10 +32,13 @@ class WebpackServerView implements ConsoleView {
     private ConsoleView myConsoleView;
     private JPanel myComponent;
     private StatusPanel statusPanel;
+    private AssetsPanel assetsPanel;
+    private Project project;
 
-    WebpackServerView(TextConsoleBuilder builder, ServerStatusMonitor monitor) {
+    WebpackServerView(Project project, TextConsoleBuilder builder, ServerStatusMonitor monitor) {
         this.myConsoleView = builder.getConsole();
         this.monitor = monitor;
+        this.project = project;
         Disposer.register(this, this.myConsoleView);
         Disposer.register(this, monitor);
     }
@@ -114,7 +123,18 @@ class WebpackServerView implements ConsoleView {
     public JComponent getComponent() {
         if (null == this.myComponent) {
             this.myComponent = new JPanel(new BorderLayout());
-            this.myComponent.add(this.myConsoleView.getComponent(), BorderLayout.CENTER);
+            this.assetsPanel = new AssetsPanel();
+            Disposer.register(this, this.assetsPanel);
+            JBTabs tabs = new JBTabsImpl(this.project);
+            TabInfo consoleTab = new TabInfo(this.myConsoleView.getComponent());
+            consoleTab.setPreferredFocusableComponent(this.myConsoleView.getPreferredFocusableComponent());
+            consoleTab.setText(WebpackDevServerBundle.message("view.console.title"));
+            TabInfo statsTab = new TabInfo(this.assetsPanel.getComponent());
+            statsTab.setPreferredFocusableComponent(this.assetsPanel.getPreferredFocusableComponent());
+            statsTab.setText(WebpackDevServerBundle.message("view.assets.title"));
+            tabs.addTab(consoleTab);
+            tabs.addTab(statsTab);
+            this.myComponent.add(tabs.getComponent(), BorderLayout.CENTER);
 
             final ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, new DefaultActionGroup(this.myConsoleView.createConsoleActions()), false);
             this.myComponent.add(toolbar.getComponent(), BorderLayout.WEST);
@@ -136,11 +156,12 @@ class WebpackServerView implements ConsoleView {
                 }
 
                 @Override
-                public void onComplete(Boolean errors) {
+                public void onComplete(Boolean errors, List<Asset> assets) {
                     if (errors == Boolean.TRUE) {
                         statusPanel.setErrorMessage(WebpackDevServerBundle.message("status.message.complete.errors"));
                     } else {
                         statusPanel.setSuccessMessage(WebpackDevServerBundle.message("status.message.complete"));
+                        assetsPanel.setAssets(assets);
                     }
                 }
 
@@ -163,6 +184,7 @@ class WebpackServerView implements ConsoleView {
     @Override
     public void dispose() {
         this.myConsoleView.dispose();
+        this.assetsPanel.dispose();
         this.monitor.dispose();
     }
 }

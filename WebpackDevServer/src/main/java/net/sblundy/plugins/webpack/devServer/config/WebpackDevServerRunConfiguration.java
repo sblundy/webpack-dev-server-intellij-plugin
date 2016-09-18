@@ -3,23 +3,25 @@ package net.sblundy.plugins.webpack.devServer.config;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreter;
 import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterRef;
+import com.intellij.javascript.nodejs.interpreter.local.NodeJsLocalInterpreter;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import net.sblundy.plugins.webpack.devServer.WebpackDevServerBundle;
 import net.sblundy.plugins.webpack.devServer.run.WebpackDevServerRunProfileState;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 /**
  */
@@ -105,7 +107,32 @@ public class WebpackDevServerRunConfiguration extends RunConfigurationBase imple
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        //TODO
+        checkNotBlank(this.portNumber, WebpackDevServerBundle.message("editor.config.check.portNumber"));
+        checkFileExists(this.webPackConfigFile, WebpackDevServerBundle.message("editor.config.check.webPackConfigFile"));
+        checkFileExists(this.nodeModulesDir, WebpackDevServerBundle.message("editor.config.check.nodeModulesDir"));
+        File webpack = new File(this.nodeModulesDir, "webpack");
+        NodeJsInterpreter interpreter = getInterpreterRef().resolve(getProject());
+        NodeJsLocalInterpreter.checkForRunConfiguration(interpreter);
+        if (!webpack.exists()) {
+            throw new RuntimeConfigurationWarning(WebpackDevServerBundle.message("editor.config.check.webpack.module"));
+        }
+    }
+
+    private void checkNotBlank(String value, String message) throws RuntimeConfigurationError {
+        if (StringUtils.isBlank(value)) {
+            throw new RuntimeConfigurationError(message);
+        }
+    }
+
+    private void checkFileExists(String value, String message) throws RuntimeConfigurationError {
+        String path = toSystemDependentNameOrNull(value);
+        if (StringUtils.isBlank(path)) {
+            throw new RuntimeConfigurationError(message);
+        }
+        File file = new File(path);
+        if (!file.exists()) {
+            throw new RuntimeConfigurationError(message);
+        }
     }
 
     public void setPortNumber(String portNumber) {

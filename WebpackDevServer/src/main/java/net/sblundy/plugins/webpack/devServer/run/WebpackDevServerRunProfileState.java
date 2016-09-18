@@ -48,7 +48,9 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
         GeneralCommandLine commandLine = new GeneralCommandLine();
         commandLine.withEnvironment("NODE_PATH", this.serverMonitorFactory.getLibraryCache(configuration.getInterpreterRef()).getAbsolutePath() + File.pathSeparator + new File(configuration.getNodeModulesDir()).getAbsolutePath());
         commandLine.withCharset(CharsetToolkit.UTF8_CHARSET);
-        commandLine.setWorkDirectory(configuration.getWorkingDir());
+        if (StringUtils.isNotBlank(configuration.getWorkingDir())) {
+            commandLine.setWorkDirectory(configuration.getWorkingDir());
+        }
 
         commandLine.setExePath(configuration.getInterpreterRef().resolveAsLocal(getEnvironment().getProject()).getInterpreterSystemDependentPath());
         if (StringUtils.isNotBlank(configuration.getNodeOptions())) {
@@ -56,7 +58,7 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
         }
         File script = this.serverMonitorFactory.getScriptFile();
         commandLine.addParameter(script.getAbsolutePath());
-        commandLine.addParameter(configuration.getWebPackConfigFile());
+        commandLine.addParameter(new File(configuration.getWebPackConfigFile()).getAbsolutePath());
         commandLine.addParameter(configuration.getPortNumber());
         commandLine.addParameter(String.valueOf(monitor.getPort()));
         commandLine.addParameter(StringUtils.isBlank(configuration.getBasePath()) ? "/" : configuration.getBasePath());
@@ -68,6 +70,6 @@ public class WebpackDevServerRunProfileState extends CommandLineState implements
     protected ConsoleView createConsole(@NotNull Executor executor) throws ExecutionException {
         TextConsoleBuilder builder = this.getConsoleBuilder();
 
-        return new WebpackServerView(builder, monitor);
+        return new WebpackServerView(getEnvironment().getProject(), builder, monitor);
     }
 }

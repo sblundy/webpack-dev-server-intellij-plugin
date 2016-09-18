@@ -30,8 +30,12 @@ IdeaPluginConnection.prototype.handle = function (messages) {
 };
 
 IdeaPluginConnection.prototype.handleSuccess = function (stats) {
-    var msg = {type: 'status', status: 'COMPLETE', errors: stats.value.errors};
-    this.send(msg);
+    this.send({
+        type: 'status',
+        status: 'COMPLETE',
+        errors: stats.value.errors,
+        assets: stats.value.data.assets
+    });
 };
 
 IdeaPluginConnection.prototype.handleInvalidated = function () {
