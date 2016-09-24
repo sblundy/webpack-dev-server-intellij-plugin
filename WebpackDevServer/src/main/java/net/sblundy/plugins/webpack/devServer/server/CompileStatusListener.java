@@ -8,6 +8,6 @@ public interface CompileStatusListener {
     void onInvalidated();
     void onStart();
     void onProgress(double progress, String message);
-    void onComplete(Boolean errors, List<Asset> assets);
+    void onComplete(List<Asset> assets, List<String> errorMessages);
     void onFailure();
 }

@@ -33,7 +33,7 @@ IdeaPluginConnection.prototype.handleSuccess = function (stats) {
     this.send({
         type: 'status',
         status: 'COMPLETE',
-        errors: stats.value.errors,
+        errorMessages: stats.value.data.errors,
         assets: stats.value.data.assets
     });
 };

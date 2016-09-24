@@ -61,7 +61,7 @@ internal class ServerStatusMonitorImpl(val mapper: ObjectMapper) : ServerStatusM
                     it.onProgress(msg.progress, msg.operations)
                 }
             }
-            ServerStatusMonitor.ServerStatus.COMPLETE -> this.compileListeners.forEach { it.onComplete(msg.errors, msg.assets) }
+            ServerStatusMonitor.ServerStatus.COMPLETE -> this.compileListeners.forEach { it.onComplete(msg.assets, msg.errors) }
             ServerStatusMonitor.ServerStatus.FAILED -> this.compileListeners.forEach { it.onFailure() }
             ServerStatusMonitor.ServerStatus.NONE -> {}
         }

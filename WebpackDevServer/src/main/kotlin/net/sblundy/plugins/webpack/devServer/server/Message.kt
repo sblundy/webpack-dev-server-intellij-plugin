@@ -5,7 +5,7 @@ internal data class Message(
         val status: String,
         val progress: Double?,
         val operations: String?,
-        val errors: Boolean?,
+        val errors: List<String>?,
         val assets: List<Asset>?)
 
 internal data class Asset(

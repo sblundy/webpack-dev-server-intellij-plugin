@@ -33,6 +33,7 @@ class WebpackServerView implements ConsoleView {
     private JPanel myComponent;
     private StatusPanel statusPanel;
     private AssetsPanel assetsPanel;
+    private ErrorsPanel errorsPanel;
     private Project project;
 
     WebpackServerView(Project project, TextConsoleBuilder builder, ServerStatusMonitor monitor) {
@@ -124,7 +125,9 @@ class WebpackServerView implements ConsoleView {
         if (null == this.myComponent) {
             this.myComponent = new JPanel(new BorderLayout());
             this.assetsPanel = new AssetsPanel();
+            this.errorsPanel = new ErrorsPanel(project);
             Disposer.register(this, this.assetsPanel);
+            Disposer.register(this, this.errorsPanel);
             JBTabs tabs = new JBTabsImpl(this.project);
             TabInfo consoleTab = new TabInfo(this.myConsoleView.getComponent());
             consoleTab.setPreferredFocusableComponent(this.myConsoleView.getPreferredFocusableComponent());
@@ -132,8 +135,12 @@ class WebpackServerView implements ConsoleView {
             TabInfo statsTab = new TabInfo(this.assetsPanel.getComponent());
             statsTab.setPreferredFocusableComponent(this.assetsPanel.getPreferredFocusableComponent());
             statsTab.setText(WebpackDevServerBundle.message("view.assets.title"));
+            TabInfo errorsTab = new TabInfo(this.errorsPanel.getComponent());
+            errorsTab.setPreferredFocusableComponent(this.errorsPanel.getPreferredFocusableComponent());
+            errorsTab.setText(WebpackDevServerBundle.message("view.errors.title"));
             tabs.addTab(consoleTab);
             tabs.addTab(statsTab);
+            tabs.addTab(errorsTab);
             this.myComponent.add(tabs.getComponent(), BorderLayout.CENTER);
 
             final ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.UNKNOWN, new DefaultActionGroup(this.myConsoleView.createConsoleActions()), false);
@@ -148,6 +155,7 @@ class WebpackServerView implements ConsoleView {
                 @Override
                 public void onStart() {
                     statusPanel.setSuccessMessage(WebpackDevServerBundle.message("status.message.started"));
+                    errorsPanel.clear();
                 }
 
                 @Override
@@ -156,9 +164,10 @@ class WebpackServerView implements ConsoleView {
                 }
 
                 @Override
-                public void onComplete(Boolean errors, List<Asset> assets) {
-                    if (errors == Boolean.TRUE) {
+                public void onComplete(List<Asset> assets, List<String> errorMessages) {
+                    if (errorMessages != null && !errorMessages.isEmpty()) {
                         statusPanel.setErrorMessage(WebpackDevServerBundle.message("status.message.complete.errors"));
+                        errorsPanel.setErrors(errorMessages);
                     } else {
                         statusPanel.setSuccessMessage(WebpackDevServerBundle.message("status.message.complete"));
                         assetsPanel.setAssets(assets);
@@ -185,6 +194,7 @@ class WebpackServerView implements ConsoleView {
     public void dispose() {
         this.myConsoleView.dispose();
         this.assetsPanel.dispose();
+        this.errorsPanel.dispose();
         this.monitor.dispose();
     }
 }
