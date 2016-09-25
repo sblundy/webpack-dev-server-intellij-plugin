@@ -4,7 +4,6 @@ import com.intellij.javascript.nodejs.interpreter.NodeJsInterpreterRef
 import com.intellij.openapi.command.impl.DummyProject
 import com.intellij.openapi.project.Project
 import com.winterbe.expekt.expect
-import com.winterbe.expekt.should
 import org.jdom.Element
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
@@ -60,18 +59,18 @@ fun itsFieldsShouldMatch(dsl: Dsl, expected: WebpackDevServerRunConfiguration, a
         expect(actual.portNumber).to.equal(expected.portNumber)
     }
     dsl.it("should have same nodeOptions") {
-        actual.nodeOptions.should.equal(expected.nodeOptions)
+        expect(actual.nodeOptions).to.equal(expected.nodeOptions)
     }
     dsl.it("should have same webPackConfigFile") {
-        actual.webPackConfigFile.should.equal(expected.webPackConfigFile)
+        expect(actual.webPackConfigFile).to.equal(expected.webPackConfigFile)
     }
     dsl.it("should have same nodeModulesDir") {
-        actual.nodeModulesDir.should.equal(expected.nodeModulesDir)
+        expect(actual.nodeModulesDir).to.equal(expected.nodeModulesDir)
     }
     dsl.it("should have same workingDir") {
-        actual.workingDir.should.equal(expected.workingDir)
+        expect(actual.workingDir).to.equal(expected.workingDir)
     }
     dsl.it("should have same baseDir") {
-        actual.basePath.should.equal(expected.basePath)
+        expect(actual.basePath).to.equal(expected.basePath)
     }
 }

@@ -37,7 +37,7 @@ dependencies {
 
     javascript project(':server')
 
-    testCompile "com.winterbe:expekt:0.4.0"
+    testCompile "com.winterbe:expekt:0.5.0"
     testCompile 'org.jetbrains.spek:spek-api:1.0.89'
     testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.0.89'
 }
@@ -55,7 +55,7 @@ junitPlatform {
     }
 }
 
-task copyJs(type: org.gradle.api.tasks.Copy, dependsOn: configurations.javascript) {
+task copyJs(type: Copy, dependsOn: configurations.javascript) {
     from zipTree(configurations.javascript.singleFile)
     into { "$prepareSandbox.destinationDir/$project.name/" }
 }
